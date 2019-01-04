@@ -4,4 +4,4 @@ En el presente pryecto mostramos una aplicación de Shiny (R) que contiene un co
 
 https://iiepuce.shinyapps.io/Analisis_IPC_Ecuador/
 
-![IPC App](Capture1.png)
+<img src="Capture1.png" alt="EPN" style="width:70px"> Proyecto de Investigación
