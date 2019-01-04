@@ -1,4 +1,4 @@
-# Indice de Precios al Consumidor (Ecuador)
+# Proyecto de Investigación
 
 En el presente proyecto realizamos un Análisis completo de Regresión del Indice de Precios al Consumidor del periodo Enero 2005 - Noviembre 2018, a partir de datos publicados periodicamente por el INEC. 
 
