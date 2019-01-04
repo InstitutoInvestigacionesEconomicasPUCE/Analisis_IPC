@@ -4,4 +4,4 @@ En el presente pryecto mostramos una aplicación de Shiny (R) que contiene un co
 
 https://iiepuce.shinyapps.io/Analisis_IPC_Ecuador/
 
-![IPC App](App Regresiones/Capture1.png)
+![IPC App](Capture1.png)
