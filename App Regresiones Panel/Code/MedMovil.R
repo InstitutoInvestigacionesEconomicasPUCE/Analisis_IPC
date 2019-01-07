@@ -1,6 +1,9 @@
 #Funcion para analisis de Medias Moviles
 
+#Interpolación
+source(file = "Code/Extrapolacion.R", local = TRUE)
 
+#Medias Moviles Extension
 MedMovBeta = function(x,n=5){
   #Simulacion de Distribucion Empirica de Ruido -------------------------------------
   set.seed(1)
@@ -16,7 +19,7 @@ MedMovBeta = function(x,n=5){
     
     return(Distrib)
   }
-  #Simulacion a Partir de Distribucion Empirica
+  #Simulacion a Partir de Distribucion Empirica (Rellenar Valores Perdidos)
   rEmpirica = function(Lista_Xi,n=1){
     Lista_Xi = Lista_Xi[!is.na(Lista_Xi)]
     if(n>0){
@@ -34,23 +37,25 @@ MedMovBeta = function(x,n=5){
     return(xsim)
   }
   
-  #Algoritmo Medias Moviles
+  #Algoritmo Medias Moviles   ------------------------
   mvx = stats::filter(x, rep(1 / n, n), sides = 2)
-  resx = x - mvx
   
-  resxRecup = resx
-  resxRecup[is.na(resxRecup)] = rEmpirica(Lista_Xi = resx, n = sum(is.na(resx)))
   
-  mvxRecup = x - resxRecup
-  
-  # par(mfrow = c(2, 1))
+  # 1. Rellenar Valores Perdidos (rEmpirica)  --------
+  # resx = x - mvx
   # 
-  # plot(x, main = paste0("IPC, Media Movil [",n,"]"),type = "l", ylab = "IPC")
-  # lines(mvxRecup,col= "red")
-  # lines(mvx , col = "blue")
-  # plot(resxRecup, ylab = "Residuos", main = "Residuos",col="red")
-  # lines(resx)
-  return(data.frame(x,mvx,resx,mvxRecup,resxRecup))
+  # resxRecup = resx
+  # resxRecup[is.na(resxRecup)] = rEmpirica(Lista_Xi = resx, n = sum(is.na(resx)))
+  # 
+  # mvxRecup = x - resxRecup
+  
+  #2. Rellenar usando Interpolación Lagrange  --------
+  
+  
+  
+  mvxRecup = extrapolacion(mvx,ord=2)
+  
+  return(data.frame(x,mvx,mvxRecup))
 }
 
 #Media Movil del IPC GENERAL

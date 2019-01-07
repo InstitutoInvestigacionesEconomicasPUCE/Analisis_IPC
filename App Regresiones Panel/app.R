@@ -19,6 +19,7 @@ library(xtable)
 library(DT)
 library(tidyverse)
 #Series de Tiempo
+library(polynom)
 library(TSdist)
 library(ggplot2)
 library(gridExtra)
@@ -53,7 +54,7 @@ source(file ="Code/MedMovil.R" ,local = TRUE)
 # ========================================================================
 
 ui <- navbarPage(title = "Análisis IPC Ecuador",
-                 header = tags$h3("Header-Plataforma",tags$head(tags$link(rel='shortcut icon', 
+                 header = tags$h3(" - ",tags$head(tags$link(rel='shortcut icon', 
                                                                           href='puce.ico', 
                                                                           type='image/x-icon'))),
                  position = "fixed-top",theme=shinytheme('yeti'),#theme = 'estilo.css',
