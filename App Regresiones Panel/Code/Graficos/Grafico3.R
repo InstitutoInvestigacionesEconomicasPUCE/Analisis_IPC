@@ -97,7 +97,7 @@ seriegraf2 =  ggplot(data = BDDgraf, aes(x = Fecha, y = SerieStnd)) +
            ),
            x = perd,
            # x = as.Date("01-01-2010", format = "%d-%m-%Y"), 
-           y = max(BDDgraf$SerieStnd),
+           y = max(BDDgraf$SerieStnd)*1.07,
            size = 4
   )+
   annotate("text",
@@ -107,7 +107,7 @@ seriegraf2 =  ggplot(data = BDDgraf, aes(x = Fecha, y = SerieStnd)) +
            ),
            x = perd,
            #Posicion Y
-           y = posY*max(BDDgraf$SerieStnd) + (1-posY)*min(BDDgraf$SerieStnd),
+           y = posY*max(BDDgraf$SerieStnd)*1.07 + (1-posY)*min(BDDgraf$SerieStnd),
            size = 4
   )+
   theme(
