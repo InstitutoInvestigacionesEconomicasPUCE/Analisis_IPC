@@ -1,0 +1,3 @@
+Se juntan estos dos archivos y se usa en el Mapa.
+El uno tiene la serie incompleta (pero "Real")del IPC de Santo Domingo (comienza en Enero de 2015)
+Y el otro tiene la serie completa que se "estimo" a partir de las principales Provincias.

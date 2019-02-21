@@ -1,0 +1,10 @@
+name: Mapa_IPC_Ecuador
+title:
+username:
+account: iiepuce
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 649223
+bundleId: 1820969
+url: https://iiepuce.shinyapps.io/Mapa_IPC_Ecuador/
+when: 1547761888.24648

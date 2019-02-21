@@ -12,8 +12,7 @@ anhos=function(periodos){
 }
 perd=anhos(periodos)
 #---------------------------------------
-BDDgraf1 = BDDgraf 
-deflactAux = "MM12(IPC General)"
+BDDgraf1 = BDDgraf
 resumen = data.frame(round(xtable(summary(modelo1)),digits = 5))
 names(resumen) = c("Estimación","Error Estándar","t-valor","Pr(>|t|)")
 Pval = as.numeric(summary(modelo1)$coefficients[,4])
@@ -38,15 +37,14 @@ xsim=c()
 for (i in 1:length(tablabetas[,1])) {
   xsim=c(xsim,rnorm(N,tablabetas[i,1],tablabetas[i,2]))
 }
-BDDFF=data.frame(Periodos_Corte=etiquetas1,xsim)  
+BDDFF=data.frame(Periodos_Corte = etiquetas1,xsim)  
 mediasbetas=data.frame(medias=tablabetas[,1], periodos1=etiquetas)
 BDDgraf1 = BDDgraf1[,c(1,3,4)]
 names(BDDgraf1) = c("Fecha",
                     "Serie Original",
-                    deflactAux)
+                    "MM12(IPC General)")
 
 BDDgraf1 = BDDgraf1 %>%
-  # select(Fecha,`Serie Original` = SerieOrig, IPC_GeneralS) %>%
   gather(key = "Serie", value = "value", -Fecha)
 #-------------------------------------------
 seriegraf1 = ggplot(BDDgraf1, aes(x = Fecha, y = value)) + 
@@ -103,7 +101,7 @@ seriegraf2 =  ggplot(data = BDDgraf, aes(x = Fecha, y = SerieStnd)) +
   annotate("text",
            label = TeX(paste0("$ \\alpha = ",
                               round(mediasbetas$medias,5),"$"
-                              )
+           )
            ),
            x = perd,
            #Posicion Y
@@ -126,7 +124,8 @@ seriegraf2 =  ggplot(data = BDDgraf, aes(x = Fecha, y = SerieStnd)) +
 
 #Grafico Densidades  ------------------------------------
 densidades = ggplot(data = BDDFF ,
-                    aes(xsim, fill = Periodos_Corte, color=Periodos_Corte)) +  geom_density(alpha = 0.2) +
+                    aes(xsim, fill = Periodos_Corte, color=Periodos_Corte)) +  
+  geom_density(alpha = 0.2) +
   labs(title = TeX("Distribución de $\\alpha 's$ por Periodo")) +
   geom_vline(data = mediasbetas,
              aes(xintercept = medias, color=periodos1),
@@ -148,7 +147,58 @@ densidades = ggplot(data = BDDFF ,
            y = -10,
            size = 3
   )
-  
+
+
+# Densidad de Residuos ???
+# Ultimo Periodo
+# Incluye Linea VaR (Valor en Riesgo)   ---------------------------------
+# ResidPanel = data.frame(Fecha, PeriodoCorte, y = modelo1$residuals)
+# ResidPanel = ResidPanel %>% filter(PeriodoCorte == etiquetas[length(etiquetas)])
+# VaR = quantile(ResidPanel$Residuos,0.05)
+# VarGraf = ggplot(data = ResidPanel, aes(y)) +
+#   geom_density(alpha = 0.2, size=1.2) +
+#   labs(title = TeX("Distribucion: Residuos del ultimo periodo")) +
+#   geom_vline(aes(xintercept = VaR),
+#              linetype = "dashed",
+#              colour = "red",
+#              size = 1.5)
+
+# Distribución del IPC deflactado
+BVar = BDDpanel %>%
+  dplyr::filter(PeriodoCorte == etiquetas[length(etiquetas)]) %>% 
+  dplyr::select(Fecha,PeriodoCorte,SerieStnd)
+BVar = with(density(BVar$SerieStnd), data.frame(x, y))
+VaR = quantile(BVar$SerieStnd,0.05)
+
+al=0.3;al2=0.23;
+VarGraf = ggplot(data = BVar, mapping = aes(x = x, y = y)) +
+  labs(title = TeX("Distribucion: IPC Deflactado (ultimo periodo)")) +
+  geom_line(size=1,colour="grey")+
+  geom_area(mapping = aes(x = ifelse(x< VaR , x, NA)), fill = "red",alpha=0.4) +
+  geom_area(mapping = aes(x = ifelse(x> VaR , x, NA)), fill = "#33cccc",alpha=0.4) +
+  ylim(0,max(BVar$y)) + ylab("Densidad")+
+  xlim(min(BVar$x), max(BVar$x)) + xlab("IPC Deflactado") +
+  geom_vline(aes(xintercept = VaR),
+             linetype = "dashed",
+             colour = "red",
+             size = 1.2)+
+  annotate("text",
+           label = "5% VaR",
+           x = al*min(BVar$x)+(1-al)*VaR,
+           #Posicion Y
+           y = al*max(BVar$y),
+           size = 5
+  )+
+  annotate("text",
+           label = 2.3331313,
+           x = al2*min(BVar$x)+(1-al2)*VaR,
+           #Posicion Y
+           y = al2*max(BVar$y),
+           size = 5
+  )
+
+# plot(VarGraf)
+
 
 
 #Grafico Multiple -----------------
@@ -158,3 +208,4 @@ grid.arrange(
   layout_matrix = rbind(c(1, 3),
                         c(2, 3))
 )
+

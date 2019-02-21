@@ -20,3 +20,13 @@ rsconnect::deployApp("App Regresiones Panel",
                      appName = "Analisis_IPC_Ecuador")
 
 
+# MAPA IPC 2019 -----------------
+rsconnect::setAccountInfo(name='iiepuce',
+                          token='53037FA556A5F1E9C83C39DB300CFD72',
+                          secret='DxF1zddv2UzfBFJi15z3US7eLs+bhnC/qv0QPA4M')
+
+rsconnect::deployApp("App Mapa IPC",
+                     account = "iiepuce",
+                     appName = "Mapa_IPC_Ecuador")
+
+
